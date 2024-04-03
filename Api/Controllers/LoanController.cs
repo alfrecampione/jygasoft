@@ -18,7 +18,7 @@ public class LoanController:ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostLoan([FromForm] CreateLoanDto createLoanDto)
+    public async Task<IActionResult> Post([FromForm] CreateLoanDto createLoanDto)
     {
         var loan = await _loanService.PostLoan(createLoanDto);
         if (loan == -1)
@@ -26,7 +26,7 @@ public class LoanController:ControllerBase
         return Ok(loan);
     }
     [HttpGet("{ci}")]
-    public async Task<IActionResult> GetLoan(string ci)
+    public async Task<IActionResult> Get(string ci)
     {
         var loan = await _loanService.GetLoan(ci);
         if (loan == null)
@@ -34,15 +34,15 @@ public class LoanController:ControllerBase
         return Ok(loan);
     }
     [HttpPut]
-    public async Task<IActionResult> UpdateLoan(int id, [FromForm] UpdateLoanDto updateLoanDto)
+    public async Task<IActionResult> Update([FromForm] UpdateLoanDto updateLoanDto)
     {
-        await _loanService.UpdateLoan(id, updateLoanDto);
+        await _loanService.UpdateLoan(updateLoanDto);
         return Ok();
     }
-    [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteLoan(int id)
+    [HttpDelete("{ci}")]
+    public async Task<IActionResult> Delete(string ci)
     {
-        await _loanService.DeleteLoan(id);
+        await _loanService.DeleteLoan(ci);
         return Ok();
     }
 }

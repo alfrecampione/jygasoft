@@ -20,6 +20,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 //builder.Services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
 builder.Services.AddTransient<IDataRepository, DataRepository>();
 builder.Services.AddTransient<IPersonService, PersonService>();
+builder.Services.AddTransient<ILoanService, LoanService>();
+builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 // Add controller services to build the api.
 builder.Services.AddControllers();

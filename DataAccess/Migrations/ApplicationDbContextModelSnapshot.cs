@@ -23,7 +23,7 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Amount")
+                    b.Property<float>("Balance")
                         .HasColumnType("REAL");
 
                     b.Property<DateOnly>("Date")
@@ -57,13 +57,16 @@ namespace DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<float>("Amount")
+                    b.Property<float>("Balance")
+                        .HasColumnType("REAL");
+
+                    b.Property<float>("Balance")
                         .HasColumnType("REAL");
 
                     b.Property<int>("LoanId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateOnly>("PayDate")
+                    b.Property<DateOnly?>("PayDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PaymentPeriod")

@@ -13,31 +13,10 @@ public class PaymentService: IPaymentService
     {
         _dataRepository = dataRepository;
     }
-    
-    public async Task<int> PostPayment(CreatePaymentDto paymentDto)
-    {
-        var loan = await _dataRepository.Set<Loan>().FirstOrDefaultAsync(l=>l.Id == paymentDto.LoanId);
-        if (loan == null)
-        {
-            throw new Exception("Loan not found");
-        }
-        var payment = new Payment()
-        {
-            LoanId = paymentDto.LoanId,
-            Amount = paymentDto.Amount,
-            PaymentPeriod = paymentDto.PaymentPeriod,
-            PayDate = paymentDto.PayDate,
-            Status = paymentDto.Status
-        };
-        await _dataRepository.Set<Payment>().Create(payment);
-        await _dataRepository.Save(default);
-        return payment.Id;
-    }
 
-    public async Task<PaymentDto?> GetPayment(int paymentId)
+    private void ChangeStatus(string CI)
     {
-        var payment = await _dataRepository.Set<Payment>().FirstOrDefaultAsync(p => p.Id == paymentId);
-        return payment == null ? null : PaymentDto.FromEntity(payment);
+        
     }
 
     public async Task<IEnumerable<PaymentDto>?> GetPayments(string personCI)
@@ -50,18 +29,56 @@ public class PaymentService: IPaymentService
             .ToListAsync();
     }
 
-    public async Task UpdatePayment(int paymentId, UpdatePaymentDto paymentDto)
+    public async Task PostPayment(CreatePaymentDto paymentDto)
     {
-        var payment = await _dataRepository.Set<Payment>().FirstOrDefaultAsync(p => p.Id == paymentId);
+        var loan = await _dataRepository.Set<Loan>()
+            .Include(l=>l.Payments)
+            .FirstOrDefaultAsync(l=>l.PersonCI == paymentDto.PersonCI);
+        if (loan == null)
+        {
+            throw new Exception("Loan not found");
+        }
+
+        var payment = loan.Payments.FirstOrDefault(p => MathF.Abs(p.Amount - p.Balance) > 0);
+        var copy = payment;
         if (payment == null)
         {
-            throw new Exception("Payment not found");
+            throw new Exception("Loan already paid");
         }
-        payment.Amount = paymentDto.Amount;
-        payment.PaymentPeriod = paymentDto.PaymentPeriod;
-        payment.PayDate = paymentDto.PayDate;
-        payment.Status = paymentDto.Status;
+        float amount = paymentDto.Amount;
+        
+        while (amount>0)
+        {
+            copy.Balance += amount;
+            if (copy.Balance > copy.Amount )
+            {
+                amount = copy.Balance - copy.Amount;
+                copy.Balance = copy.Amount;
+                copy.PayDate = paymentDto.PayDate;
+                copy.Status = "Pagado";
+            }
+            else
+            {
+                amount = 0;
+                break;
+            }
+            payment = loan.Payments.FirstOrDefault(p => Math.Abs(p.Amount - p.Balance) > 0);
+            if (payment == null)
+            {
+                if (amount > 0)
+                {
+                    throw new Exception("Amount exceeds loan");
+                }
+                await _dataRepository.Save(default);
+                return;
+            }
+            copy = payment;
+        }
+        copy.PayDate = paymentDto.PayDate;
+        copy.Status = copy.Amount-copy.Balance > float.Epsilon ? "Pendiente" : "Pagado";
+        
         await _dataRepository.Save(default);
+        return;
     }
 
     public async Task DeletePayment(int paymentId)

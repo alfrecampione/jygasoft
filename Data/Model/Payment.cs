@@ -12,9 +12,10 @@ public class Payment
     public Loan Loan { get; set; }
     
     public float Amount { get; set; }
+    public float Balance { get; set; }
     public int PaymentPeriod { get; set; }
 
-    public DateOnly PayDate { get; set; } // Fecha de pago
+    public DateOnly? PayDate { get; set; } // Fecha de pago
     
     public string Status { get; set; }
 }

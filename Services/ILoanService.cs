@@ -6,6 +6,6 @@ public interface ILoanService
 {
     Task<int> PostLoan(CreateLoanDto createLoanDto);
     Task<LoanDto?> GetLoan(string ci);
-    Task UpdateLoan(int loanId, UpdateLoanDto updateLoanDto);
-    Task DeleteLoan(int loanId);
+    Task UpdateLoan(UpdateLoanDto updateLoanDto);
+    Task DeleteLoan(string ci);
 }

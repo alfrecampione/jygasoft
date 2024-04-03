@@ -8,7 +8,7 @@ public class PaymentDto
     public float Amount { get; set; }
     public int PaymentPeriod { get; set; }
 
-    public DateOnly PayDate { get; set; } // Fecha de pago
+    public DateOnly? PayDate { get; set; } // Fecha de pago
     
     public string Status { get; set; }
     
@@ -16,7 +16,7 @@ public class PaymentDto
     {
         return new PaymentDto
         {
-            Amount = payment.Amount,
+            Amount = MathF.Round(payment.Balance, 3),
             PaymentPeriod = payment.PaymentPeriod,
             PayDate = payment.PayDate,
             Status = payment.Status

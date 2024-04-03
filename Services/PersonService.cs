@@ -37,7 +37,20 @@ public class PersonService: IPersonService
             PayDay = createPersonDto.DayOfPayment,
             Person = person,
             PersonCI = person.CI,
+            Payments = new Payment[createPersonDto.MonthsToPay]
         };
+        int i = 1;
+        loan.Payments = loan.Payments.Select(p => new Payment
+        {
+            Amount = MathF.Round((loan.Amount / loan.MonthsToPay)*(1+(loan.InterestRate*loan.MonthsToPay)/100f),3),
+            Balance = 0,
+            PaymentPeriod = i++,
+            PayDate = null,
+            Status = "Pending",
+            Loan = loan,
+            LoanId = loan.Id
+        }).ToArray();
+        
         await _dataRepository.Set<Loan>().Create(loan);
         await _dataRepository.Save(default);
         return person.CI;

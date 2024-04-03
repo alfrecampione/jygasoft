@@ -23,8 +23,20 @@ public class LoanService: ILoanService
             Amount = createLoanDto.Amount,
             MonthsToPay = createLoanDto.MonthsToPay,
             PayDay = createLoanDto.PayDay,
-            InterestRate = createLoanDto.InterestRate
+            InterestRate = createLoanDto.InterestRate,
+            Payments = new Payment[createLoanDto.MonthsToPay]
         };
+        int i = 1;
+        loan.Payments = loan.Payments.Select(p => new Payment
+        {
+            Balance = 0,
+            Amount = (loan.Amount / loan.MonthsToPay)*(1+loan.InterestRate),
+            PaymentPeriod = i++,
+            PayDate = null,
+            Status = "Pending",
+            Loan = loan,
+            LoanId = loan.Id
+        }).ToArray();
         var person = await _dataRepository.Set<Person>().FirstOrDefaultAsync(p => p.CI == createLoanDto.PersonCI);
         if (person == null)
         {
@@ -42,9 +54,11 @@ public class LoanService: ILoanService
         return loan == null ? null : LoanDto.FromEntity(loan);
     }
 
-    public async Task UpdateLoan(int loanId, UpdateLoanDto updateLoanDto)
+    public async Task UpdateLoan(UpdateLoanDto updateLoanDto)
     {
-        var loan = await _dataRepository.Set<Loan>().FirstOrDefaultAsync(l => l.Id == loanId);
+        var loan = await _dataRepository.Set<Loan>()
+            .Include(l=>l.Payments)
+            .FirstOrDefaultAsync(l => l.PersonCI==updateLoanDto.PersonCI);
         if (loan == null)
             throw new Exception("Loan not found");
         loan.PersonCI = updateLoanDto.PersonCI;
@@ -53,14 +67,22 @@ public class LoanService: ILoanService
         loan.MonthsToPay = updateLoanDto.MonthsToPay;
         loan.PayDay = updateLoanDto.PayDay;
         loan.InterestRate = updateLoanDto.InterestRate;
+
+        foreach (var payment in loan.Payments)
+        {
+            payment.Amount =
+                MathF.Round((loan.Amount / loan.MonthsToPay) * (1 + (loan.InterestRate * loan.MonthsToPay) / 100f), 3);
+            payment.Status = payment.Amount-payment.Balance > float.Epsilon ? "Pendiente" : "Pagado";
+        }
+        await _dataRepository.Save(default);
     }
 
-    public Task DeleteLoan(int loanId)
+    public async Task DeleteLoan(string ci)
     {
-        var loan =  _dataRepository.Set<Loan>().FirstOrDefault(l => l.Id == loanId);
+        var loan =  await _dataRepository.Set<Loan>().FirstOrDefaultAsync(l => l.PersonCI == ci);
         if (loan == null)
             throw new Exception("Loan not found");
         _dataRepository.Set<Loan>().Remove(loan);
-        return _dataRepository.Save(default);
+        await _dataRepository.Save(default);
     }
 }

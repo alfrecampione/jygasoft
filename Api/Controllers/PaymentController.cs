@@ -18,10 +18,10 @@ public class PaymentController: ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> PostPayment([FromForm] CreatePaymentDto createPaymentDto)
+    public async Task<IActionResult> Post([FromForm] CreatePaymentDto paymentDto)
     {
-        var paymentId = await _paymentService.PostPayment(createPaymentDto);
-        return Ok(paymentId);
+        await _paymentService.PostPayment(paymentDto);
+        return Ok();
     }
     
     [HttpGet("{ci}")]
