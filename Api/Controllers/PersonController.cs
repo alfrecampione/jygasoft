@@ -23,14 +23,14 @@ public class PersonController:ControllerBase
     public async Task<IActionResult> Post([FromForm] CreatePersonDto createPersonDto)
     {
         var personCI = await _personService.PostPerson(createPersonDto);
-        if (personCI == -1)
+        if (personCI == "")
             return BadRequest();
         var newPerson = await _personService.GetPerson(personCI);
         return CreatedAtAction(nameof(Post), new { ci = personCI }, newPerson);
     }
     
-    [HttpGet("{ci:int}")]
-    public async Task<IActionResult> Get(int ci)
+    [HttpGet("{ci}")]
+    public async Task<IActionResult> Get(string ci)
     {
         var person = await _personService.GetPerson(ci);
         if (person != null)
@@ -43,5 +43,22 @@ public class PersonController:ControllerBase
         var persons = await _personService.GetAllPersons();
         return Ok(persons);
     }
-    
+    [HttpPut("{ci}")]
+    public async Task<IActionResult> Update(string ci, [FromForm] UpdatePersonDto updatePersonDto)
+    {
+        var person = await _personService.GetPerson(ci);
+        if (person == null)
+            return NotFound();
+        await _personService.UpdatePerson(ci, updatePersonDto);
+        return Ok();
+    }
+    [HttpDelete("{ci}")]
+    public async Task<IActionResult> Delete(string ci)
+    {
+        var person = await _personService.GetPerson(ci);
+        if (person == null)
+            return NotFound();
+        await _personService.DeletePerson(ci);
+        return Ok();
+    }
 }

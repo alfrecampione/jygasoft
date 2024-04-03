@@ -22,7 +22,7 @@ public class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Person>()
             .HasKey(p => p.CI);
         modelBuilder.Entity<Person>()
-            .HasMany(p => p.Loans)
+            .HasOne(p => p.Loan)
             .WithOne(l => l.Person)
             .OnDelete(DeleteBehavior.Cascade);
 
@@ -31,8 +31,8 @@ public class ApplicationDbContext : IdentityDbContext
             .HasKey(l=> l.Id);
         modelBuilder.Entity<Loan>()
             .HasOne(l => l.Person)
-            .WithMany(p => p.Loans)
-            .HasForeignKey(l => l.PersonCI)
+            .WithOne(p => p.Loan)
+            .HasForeignKey<Loan>(l => l.PersonCI)
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<Loan>()

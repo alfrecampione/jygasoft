@@ -1,3 +1,4 @@
+using Data.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -7,8 +8,8 @@ namespace Api.Controllers;
 [Route("api/[controller]")]
 public class PaymentController: ControllerBase
 {
-    public readonly IPaymentService _paymentService;
-    public readonly ILogger<PaymentController> _logger;
+    private readonly IPaymentService _paymentService;
+    private readonly ILogger<PaymentController> _logger;
     
     public PaymentController(IPaymentService paymentService, ILogger<PaymentController> logger)
     {
@@ -16,10 +17,17 @@ public class PaymentController: ControllerBase
         _logger = logger;
     }
     
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetPayments(int id)
+    [HttpPost]
+    public async Task<IActionResult> PostPayment([FromForm] CreatePaymentDto createPaymentDto)
     {
-        var payments = await _paymentService.GetPayments(id);
+        var paymentId = await _paymentService.PostPayment(createPaymentDto);
+        return Ok(paymentId);
+    }
+    
+    [HttpGet("{ci}")]
+    public async Task<IActionResult> GetPayments(string ci)
+    {
+        var payments = await _paymentService.GetPayments(ci);
         return Ok(payments);
     }
 }

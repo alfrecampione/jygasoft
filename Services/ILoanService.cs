@@ -4,8 +4,8 @@ namespace Services;
 
 public interface ILoanService
 {
-    public Task<int> PostLoan(CreateLoanDto createLoanDto);
-    public Task<LoanDto> GetLoan(int loanId);
-    public Task UpdateLoan(int loanId, CreateLoanDto updateLoanDto);
-    public Task DeleteLoan(int loanId);
+    Task<int> PostLoan(CreateLoanDto createLoanDto);
+    Task<LoanDto?> GetLoan(int loanId);
+    Task UpdateLoan(int loanId, UpdateLoanDto updateLoanDto);
+    Task DeleteLoan(int loanId);
 }

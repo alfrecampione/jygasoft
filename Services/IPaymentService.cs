@@ -4,9 +4,9 @@ namespace Services;
 
 public interface IPaymentService
 {
-    public Task<int> PostPayment(PaymentDto paymentDto);
-    public Task<PaymentDto> GetPayment(int paymentId);
-    public Task<IEnumerable<PaymentDto>> GetPayments(int loanId);
-    public Task<int> UpdatePayment(int paymentId, PaymentDto paymentDto);
-    public Task<int> DeletePayment(int paymentId);
+    public Task<int> PostPayment(CreatePaymentDto paymentDto);
+    public Task<PaymentDto?> GetPayment(int paymentId);
+    public Task<IEnumerable<PaymentDto>?> GetPayments(string personCI);
+    public Task UpdatePayment(int paymentId, UpdatePaymentDto paymentDto);
+    public Task DeletePayment(int paymentId);
 }

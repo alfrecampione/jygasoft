@@ -62,15 +62,11 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider
         .GetRequiredService<ApplicationDbContext>();
-    var roleManager = scope.ServiceProvider
-        .GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider
-        .GetRequiredService<UserManager<IdentityUser>>();
 
     // Applies any pending migrations for the context to the database
     dbContext.Database.Migrate();
 
-    var dbInitializer = new DatabaseInitializer(dbContext, roleManager, userManager);
+    var dbInitializer = new DatabaseInitializer(dbContext);
     dbInitializer.EnsureInitialData();
 }
 

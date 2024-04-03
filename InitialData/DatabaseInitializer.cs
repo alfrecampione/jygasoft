@@ -14,8 +14,7 @@ public class DatabaseInitializer : IDatabaseInitializer
 {
     private readonly ApplicationDbContext _context;
 
-    public DatabaseInitializer(ApplicationDbContext context, RoleManager<IdentityRole> roleManager,
-        UserManager<IdentityUser> userManager)
+    public DatabaseInitializer(ApplicationDbContext context)
     {
         _context = context;
     }

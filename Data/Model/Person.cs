@@ -8,7 +8,7 @@ public class Person
     [Required]
     [MaxLength(11)]
     // ReSharper disable once InconsistentNaming
-    public int CI { get; set; }
+    public string CI { get; set; }
     
     [Required]
     [MaxLength(150)]
@@ -16,16 +16,16 @@ public class Person
     
     [Required]
     [MaxLength(100)]
-    public string FatherName { get; set; }
+    public string FatherLastName { get; set; }
     
     [Required]
     [MaxLength(100)]
-    public string MotherName { get; set; }
+    public string MotherLastName { get; set; }
     
     [Required]
     [MaxLength(200)]
     public string Email { get; set; }
-
-    public int? Phone { get; set; }
-    public IEnumerable<Loan> Loans {get; set;}
+    [MaxLength(32)]
+    public string Phone { get; set; }
+    public Loan Loan {get; set;}
 }
