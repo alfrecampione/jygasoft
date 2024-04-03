@@ -25,15 +25,15 @@ public class LoanController:ControllerBase
             return BadRequest();
         return Ok(loan);
     }
-    [HttpGet("{id:int}")]
-    public async Task<IActionResult> GetLoan(int id)
+    [HttpGet("{ci}")]
+    public async Task<IActionResult> GetLoan(string ci)
     {
-        var loan = await _loanService.GetLoan(id);
+        var loan = await _loanService.GetLoan(ci);
         if (loan == null)
             return NotFound();
         return Ok(loan);
     }
-    [HttpPut("{id:int}")]
+    [HttpPut]
     public async Task<IActionResult> UpdateLoan(int id, [FromForm] UpdateLoanDto updateLoanDto)
     {
         await _loanService.UpdateLoan(id, updateLoanDto);

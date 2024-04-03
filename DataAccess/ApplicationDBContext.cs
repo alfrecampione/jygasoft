@@ -10,6 +10,10 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+     public ApplicationDbContext()
+    {
+        // Parameterless constructor
+    }
     
     public DbSet<Person> Persons { get; set; }
     public DbSet<Loan> Loans { get; set; }

@@ -36,9 +36,9 @@ public class LoanService: ILoanService
         return loan.Id;
     }
 
-    public async Task<LoanDto?> GetLoan(int loanId)
+    public async Task<LoanDto?> GetLoan(string ci)
     {
-        var loan = await _dataRepository.Set<Loan>().Include(l => l.Person).FirstOrDefaultAsync(l => l.Id == loanId);
+        var loan = await _dataRepository.Set<Loan>().Include(l => l.Person).FirstOrDefaultAsync(l => l.PersonCI == ci);
         return loan == null ? null : LoanDto.FromEntity(loan);
     }
 

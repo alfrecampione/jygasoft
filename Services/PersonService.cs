@@ -66,12 +66,13 @@ public class PersonService: IPersonService
         var person = await _dataRepository.Set<Person>().FirstOrDefaultAsync(p=>p.CI==ci);
         if (person == null) throw new Exception("Person not found");
         
-        person.CI = updatePersonDto.CI;
         person.Name = updatePersonDto.Name;
         person.FatherLastName = updatePersonDto.FatherLastName;
         person.MotherLastName = updatePersonDto.MotherLastName;
         person.Email = updatePersonDto.Email;
         person.Phone = updatePersonDto.Phone;
+        
+        await _dataRepository.Save(default);
     }
 
     public async Task DeletePerson(string ci)
@@ -79,5 +80,6 @@ public class PersonService: IPersonService
         var person = await _dataRepository.Set<Person>().FirstOrDefaultAsync(p=>p.CI==ci);
         if (person == null) throw new Exception("Person not found");
         _dataRepository.Set<Person>().Remove(person);
+        await _dataRepository.Save(default);
     }
 }
