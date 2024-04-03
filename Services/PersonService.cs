@@ -14,6 +14,11 @@ public class PersonService: IPersonService
         throw new NotImplementedException();
     }
 
+    public Task<IEnumerable<PersonDto>> GetAllPersons()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task UpdatePerson(int ci, CreatePersonDto updatePersonDto)
     {
         throw new NotImplementedException();

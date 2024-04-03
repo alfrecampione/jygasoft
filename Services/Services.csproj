@@ -15,6 +15,7 @@
         <Folder Include="Relations\" />
     </ItemGroup>
     <ItemGroup>
+        <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.14"/>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14"/>

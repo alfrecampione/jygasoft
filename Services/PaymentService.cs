@@ -19,7 +19,7 @@ public class PaymentService: IPaymentService
         throw new NotImplementedException();
     }
 
-    public Task<int> PutPayment(int paymentId, PaymentDto paymentDto)
+    public Task<int> UpdatePayment(int paymentId, PaymentDto paymentDto)
     {
         throw new NotImplementedException();
     }

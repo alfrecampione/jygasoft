@@ -24,8 +24,6 @@ public class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Person>()
             .HasMany(p => p.Loans)
             .WithOne(l => l.Person)
-            .HasForeignKey(l => l.PersonCI)
-            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         
@@ -50,6 +48,7 @@ public class ApplicationDbContext : IdentityDbContext
             .WithMany(l => l.Payments)
             .HasForeignKey(p => p.LoanId)
             .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade); 
+            //TODO: Check if this is correct, poder borrar el pago y recalcular los datos del prestamo
     }
 }

@@ -13,7 +13,8 @@ public class Payment
     
     public int Amount { get; set; }
     public int PaymentPeriod { get; set; }
-    public DateTime PayDate { get; set; }
+
+    public DateTime PayDate { get; set; } // Fecha de pago
     
     public string Status { get; set; }
 }
