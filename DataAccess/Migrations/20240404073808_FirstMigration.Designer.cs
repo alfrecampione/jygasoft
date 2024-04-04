@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240403210716_FirstMigration")]
+    [Migration("20240404073808_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -74,9 +74,6 @@ namespace DataAccess.Migrations
 
                     b.Property<int>("PaymentPeriod")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 

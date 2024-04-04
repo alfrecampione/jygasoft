@@ -18,8 +18,9 @@ public class PaymentController: ControllerBase
     }
     
     [HttpPost]
-    public async Task<IActionResult> Post([FromForm] CreatePaymentDto paymentDto)
+    public async Task<IActionResult> Post([FromBody] CreatePaymentDto paymentDto)
     {
+        Console.WriteLine(paymentDto.PersonCI + "-----" + paymentDto.Amount);
         await _paymentService.PostPayment(paymentDto);
         return Ok();
     }

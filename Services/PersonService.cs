@@ -46,7 +46,6 @@ public class PersonService: IPersonService
             Balance = 0,
             PaymentPeriod = i++,
             PayDate = null,
-            Status = "Pending",
             Loan = loan,
             LoanId = loan.Id
         }).ToArray();

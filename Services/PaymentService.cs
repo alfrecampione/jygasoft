@@ -14,18 +14,14 @@ public class PaymentService: IPaymentService
         _dataRepository = dataRepository;
     }
 
-    private void ChangeStatus(string CI)
-    {
-        
-    }
-
     public async Task<IEnumerable<PaymentDto>?> GetPayments(string personCI)
     {
         return await _dataRepository.Set<Payment>()
             .Include(p=>p.Loan)
             .ThenInclude(l=>l.Person)
             .Where(p => p.Loan.Person.CI == personCI)
-            .Select(p => PaymentDto.FromEntity(p))
+            .Where(p=>p.Balance>0)
+            .Select(p => PaymentDto.FromEntity(p, p.Loan.Date))
             .ToListAsync();
     }
 
@@ -41,7 +37,7 @@ public class PaymentService: IPaymentService
 
         var payment = loan.Payments.FirstOrDefault(p => MathF.Abs(p.Amount - p.Balance) > 0);
         var copy = payment;
-        if (payment == null)
+        if (copy == null)
         {
             throw new Exception("Loan already paid");
         }
@@ -54,14 +50,11 @@ public class PaymentService: IPaymentService
             {
                 amount = copy.Balance - copy.Amount;
                 copy.Balance = copy.Amount;
-                copy.PayDate = paymentDto.PayDate;
-                copy.Status = "Pagado";
+                copy.PayDate = DateOnly.FromDateTime(DateTime.Now);
             }
             else
-            {
-                amount = 0;
                 break;
-            }
+            
             payment = loan.Payments.FirstOrDefault(p => Math.Abs(p.Amount - p.Balance) > 0);
             if (payment == null)
             {
@@ -74,11 +67,9 @@ public class PaymentService: IPaymentService
             }
             copy = payment;
         }
-        copy.PayDate = paymentDto.PayDate;
-        copy.Status = copy.Amount-copy.Balance > float.Epsilon ? "Pendiente" : "Pagado";
+        copy.PayDate = DateOnly.FromDateTime(DateTime.Now);
         
         await _dataRepository.Save(default);
-        return;
     }
 
     public async Task DeletePayment(int paymentId)

@@ -33,7 +33,6 @@ public class LoanService: ILoanService
             Amount = (loan.Amount / loan.MonthsToPay)*(1+loan.InterestRate),
             PaymentPeriod = i++,
             PayDate = null,
-            Status = "Pending",
             Loan = loan,
             LoanId = loan.Id
         }).ToArray();
@@ -72,7 +71,6 @@ public class LoanService: ILoanService
         {
             payment.Amount =
                 MathF.Round((loan.Amount / loan.MonthsToPay) * (1 + (loan.InterestRate * loan.MonthsToPay) / 100f), 3);
-            payment.Status = payment.Amount-payment.Balance > float.Epsilon ? "Pendiente" : "Pagado";
         }
         await _dataRepository.Save(default);
     }

@@ -12,14 +12,14 @@ public class PaymentDto
     
     public string Status { get; set; }
     
-    public static PaymentDto FromEntity(Payment payment)
+    public static PaymentDto FromEntity(Payment payment, DateOnly loanDate)
     {
         return new PaymentDto
         {
             Amount = MathF.Round(payment.Balance, 3),
             PaymentPeriod = payment.PaymentPeriod,
             PayDate = payment.PayDate,
-            Status = payment.Status
+            Status = payment.PayDate > (loanDate.AddDays(payment.PaymentPeriod)) ? "Late" : "On time"
         };
     }
 }

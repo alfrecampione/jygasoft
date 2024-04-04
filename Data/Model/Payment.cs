@@ -15,7 +15,5 @@ public class Payment
     public float Balance { get; set; }
     public int PaymentPeriod { get; set; }
 
-    public DateOnly? PayDate { get; set; } // Fecha de pago
-    
-    public string Status { get; set; }
+    public DateOnly? PayDate { get; set; }
 }

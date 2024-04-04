@@ -206,8 +206,7 @@ namespace DataAccess.Migrations
                     Amount = table.Column<float>(type: "REAL", nullable: false),
                     Balance = table.Column<float>(type: "REAL", nullable: false),
                     PaymentPeriod = table.Column<int>(type: "INTEGER", nullable: false),
-                    PayDate = table.Column<DateOnly>(type: "TEXT", nullable: true),
-                    Status = table.Column<string>(type: "TEXT", nullable: true)
+                    PayDate = table.Column<DateOnly>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
